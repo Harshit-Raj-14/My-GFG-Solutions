@@ -1,0 +1,57 @@
+/* ACCEPTED SOLUTION */
+class Solution{
+public:
+    int sumOfDigits(int n){
+        int sum=0;
+        while(n>0){
+            int digit=n%10; //sum = sum + n % 10;
+            sum+=digit;
+            n=n/10;
+        }
+        return sum;
+    }
+};
+//TC - 0(logn)
+//SC - O(1)
+
+
+/* SINGLE LINER */    ==>Code pe line marna
+class Solution{
+public:
+    int sumOfDigits(int n){
+    int sum;
+    for (sum = 0; n > 0; sum += n % 10, n /= 10);
+    return sum;
+    }
+};
+//TC - 0(logn)
+//SC - O(1)
+
+
+/* TAKING INPUT AS STRING */
+int getSum(String str)
+    {
+        int sum = 0;
+        // Traversing through the string
+        for (int i = 0; i < str.length(); i++) {
+            // Since ascii value of numbers starts from 48 so we subtract it from sum
+            sum = sum + str.charAt(i) - 48;
+        }
+        return sum;
+    }
+//TC - 0(logn)
+//SC - O(1)
+
+
+/* RECURSIVE APPROACH */
+int sumDigits(int no)
+    {
+        if(no == 0){
+          return 0 ;
+        }
+
+        return (no % 10) + sumDigits(no / 10) ;
+     }
+//TC - 0(logn)
+//SC - O(logn)
+
