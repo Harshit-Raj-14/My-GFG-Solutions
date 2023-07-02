@@ -1,0 +1,80 @@
+/* ACEPTED SOLUTION O(n) USING MATH ANALYSIS BIT MANIPULATION OBSERVATION */
+class Solution {
+    int isDivisible(String s) {
+        int odd=0;  //to count bitset at odd position
+        int even=0;  //to count bit set at even position
+        for(int i=s.length()-1;i>=0;i--){
+            if(s.charAt(i)=='1' && i%2==0) even++;  //found bitset at even posiiton
+            if(s.charAt(i)=='1' && i%2!=0) odd++;   //found bitset at odd position
+        }
+        if(Math.abs(even-odd)%3==0) return 1;
+        else return 0;
+    }
+}
+
+LOGIC ---
+There is a pattern in the binary representation of a number that can be used to find if a number is a multiple of 3. 
+If the difference between the count of odd set bits (Bits set at odd positions) and even set bits is a multiple of 3 then is the number.
+create two variables odd and even which store counts of 1 on odd and even places of a given binary.
+1. Check the odd place digit if it is 1 odd variable increment by 1.
+2. check even place digit if it is 1  even variable increment by 1.
+3. if the absolute difference between odd and even is divisible by 3 then the given binary is also divisible by 3.
+PROOF -
+Proof:
+Let the binary representation of the number be: abcde.
+In decimal form this number will be:  2^{4} * a  +  2^{3} * b  +  2^{2} * c  +  2^{1} * d  +  2^{0} * e
+Every even power of 2 can be represented as 3n + 1, and every odd power of 2 can be represented as 3n – 1. 
+ 2^0 = 3*0 + 1
+ 2^1 = 3*1 - 1
+ 2^2 = 3*1 + 1
+ 2^3 = 3*3 - 1
+
+Therefore the decimal representation of the number becomes
+(3n+1)*a + (3n-1)*b + (3n+1)*c + (3n-1)*d + (3n+1)*e
+
+To have this number divisible by 3, the term (a + c + e) - (b + d) should be divisible by 3.
+
+Therefore for the number to be divisible by, the difference between the count of odd set bits (a + c + e) and even set bits (b + d) should be divisible by 3.
+
+/* USING DFA */
+class Solution {
+    int isDivisible(String s) {
+        int[][] v = {{0, 1}, {2, 0}, {1, 2}};
+        int cur = 0;
+        for (char c : s.toCharArray()) {
+            cur = v[cur][c - '0'];
+        }
+        if(cur==0) return 1;
+        else return 0;
+    }
+}
+
+LOGIC ---
+image link - https://media.geeksforgeeks.org/comments/3ba68b6c-f444-47ee-ae9e-7264438e1671_1688068269.jpg
+The above image depicts a DFA and its table for reading a binary string from left to right and it accepts the binary number which are divisible by 3
+(or rather the number modulo 3 equals 0).
+The states of DFA represents the result for modulo of the binary number with 3.
+States 	Binary number % 3
+q0 	0
+q1 	1
+q2 	2
+
+
+
+/* OVERFLOW WRONG SOLUTION */
+class Solution {
+    int isDivisible(String s) {
+        int x=0;
+        for(int i=s.length()-1,j=0; i>=0; i--){
+            x+=Character.getNumericValue(s.charAt(i)) * Math.pow(2,j);
+            j++;
+        }
+        if(x%3==0) return 1;
+        else return 0;
+    }
+}
+
+LOGIC---
+Since the binary string is too long, calculating the decimal number represented by it could result in overflow.
+
+
