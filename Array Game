@@ -1,0 +1,23 @@
+class Solution {
+    public static int min_operations(int n, int[] arr, int[] brr) {
+        int op=0;
+        ArrayList<Integer> a = new ArrayList<>();
+        ArrayList<Integer> b = new ArrayList<>();
+        for(int i=0;i<arr.length;i++){
+            a.add(arr[i]);
+            b.add(brr[i]);
+        }
+        while(!a.isEmpty()){
+            if(a.get(0).equals(b.get(0))){
+                a.remove(0);
+                b.remove(0);
+                op++;
+            }
+            else{
+                Collections.rotate(a,-1);
+                op++;
+            }
+        }
+        return op;
+    }
+}
