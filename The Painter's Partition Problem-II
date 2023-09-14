@@ -1,0 +1,41 @@
+class Solution{
+    static long minTime(int[] arr,int n,int k){
+        //Step I: fidnign the maximum of existing answer space
+        long sum=0;
+        for(int i=0;i<arr.length;i++){
+            sum+=arr[i];
+        }
+        //Step II: Search space: 0.....sum => answer will lies on it => binary search efficient
+        //type: NNNNYYYYY => looking for first Y => maximum minimum time taken to get the job done
+        //we will check if mid is a valid allocation or not
+        long l=0;
+        long r=sum;
+        long ans=-1;
+        while(l<=r){
+            long mid=l+(r-l)/2;
+            if(checkBinary(mid, arr,k)){
+                ans=mid;    //storing a valid Y
+                r=mid-1;  //we already know that everythign to right is Y, so let's look on left
+            }
+            else l=mid+1;   //since found a N look on right side
+        }
+        return ans;
+    }
+    
+    public static boolean checkBinary(long mid, int arr[], int k){
+        long currAllocation=mid;
+        int painter=1;
+        for(int i=0;i<arr.length;i++){
+            if(currAllocation>=arr[i]) currAllocation-=arr[i];
+            else{
+                painter++;
+                if(painter>k) return false;
+                //since we were unable to get the previous work done and will be moving to next i in the iteration, make a check for the current i here itself
+                currAllocation=mid;
+                if(currAllocation>=arr[i]) currAllocation-=arr[i];
+                else return false;
+            }
+        }
+        return true;
+    }
+}
