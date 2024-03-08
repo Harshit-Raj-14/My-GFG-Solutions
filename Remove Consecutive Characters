@@ -1,0 +1,22 @@
+class Solution{
+    public String removeConsecutiveCharacter(String s){
+        int i=s.length()-1;
+        StringBuilder sb = new StringBuilder("");
+        while(i>=0){
+            char c =s.charAt(i);
+            while(i-1>=0 && s.charAt(i-1)==c) i--;
+            sb.append(c);
+            i--;
+        }
+        return sb.reverse().toString();
+    }
+}
+
+
+/*
+Just keep collecting one character each no matter how many times they exist.
+aaaabb-> ab
+aab -> ab
+
+Iterating from front also works
+*/
