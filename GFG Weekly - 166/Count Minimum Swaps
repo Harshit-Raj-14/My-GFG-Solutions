@@ -1,0 +1,21 @@
+class Solution {
+    int minSwaps(String s) {
+        int even=0;
+        int odd=0;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='1'){
+                if(i%2==0) even++;
+                else odd++;
+            }
+        }
+        if(even==odd) return 0;     //already equal no swaps required
+        if((even+odd)%2!=0) return -1;  //if the set bits itself are not even then never possible
+        return Math.abs(even-odd)/2;  //if possible the swap will be equal to their difference divded by 2(removing and adding to someplace else two job done in one swap)
+    }
+    /*
+    LOGIC---
+    The sum of the string  = no of 1's in string
+    Now length of string  = n  => 0 indexing
+    */
+    
+};

@@ -1,0 +1,31 @@
+class Solution {
+    public int countUniques(int[] arr, int k, int l, int r) {
+        HashSet<Integer> set = new HashSet<>();
+        int duplicates=0;
+        for(int i=0;i<arr.length;i++){
+            if(set.contains(arr[i])) duplicates++;
+            set.add(arr[i]);
+        }
+        int numbers_not_in_arr=0;
+        for(int i=l;i<=r;i++){
+            if(!set.contains(i)) numbers_not_in_arr++;
+            if(numbers_not_in_arr>=duplicates) break;   //all elements replace possible => to decrease iterations
+        }
+        int curr_duplicates=duplicates;
+        
+        int minReplacements = Math.min(k, Math.min(numbers_not_in_arr, curr_duplicates));
+
+        // Calculate the final number of unique elements
+        int uniqueCount = (arr.length-duplicates) + minReplacements;
+
+        return uniqueCount;  //this will be the number of unique values after
+    }
+
+    
+    /*
+    LOGIC---
+    To get the maximum number of uniques from a range, we need to change the fduplicate values from values form the range
+    For that matter we will find the duplicate instnaces not includign the originals.
+    And replace them from values of the range that are not in our orriginal array. Just remember you can do that only k times.
+    */
+}
