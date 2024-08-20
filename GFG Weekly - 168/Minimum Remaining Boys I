@@ -1,0 +1,116 @@
+PS- Minimum Remaining Boys - 1 (GFG contest 168)
+
+You are given the positions of n boys and n girls on a 2D grid. 
+The positions are represented by 2D arrays of size n*2:
+• boys where boys [i] [0] and boys [i] [1] represent the x and y coordinates of the ith boy.
+• girls where girls[j] [0] and girls [j] [1] represent the x and y coordinates jth girl. of the j
+A girl can meet a boy and form a pair if and only if both the x and y coordinates of the boy are smaller than those of the girl. Each boy can meet at most one girl and vice versa. Return the minimum number of boys who would be unable to pair after all possible meetings.
+
+Constraint: 1<n<=16; 0<=boys[i][j],girls[i][j]<10^6
+Input: n = 2, boys = [[1,1], [3,3]], girls = [[2,2],[4,4]]
+Output: 0 (no boys left after pairing)
+
+/* CODE */
+/* MEMOISATION DP */
+class Solution {
+    public static int minRemaining(int n, int[][] boys, int[][] girls){
+        int dp[][] = new int[n][(1<<n)+1];
+        for(int row[] : dp) Arrays.fill(row, -1);
+        int pairs=solve(boys, girls, 0, 0, dp); //no of boys used
+        return n-pairs;
+    }
+    
+    public static int solve(int[][] boys, int[][] girls, int idx, int bit, int dp[][]){
+        if(idx>=boys.length) return 0;  //no of boys over, but girls still left => not possible
+        if(dp[idx][bit]!=-1) return dp[idx][bit];
+        int x=boys[idx][0]; //coordinates of boy 
+        int y=boys[idx][1];
+        int ans=solve(boys, girls, idx+1, bit, dp);  //case where current boy is not paired
+        for(int i=0;i<girls.length;i++){    //case boy is selected, try to match with each girl
+            if((bit&(1<<i)) > 0) continue;   //girl already paired
+            if(x<girls[i][0] && y<girls[i][1]){ //fulfilling condition
+                bit = bit | (1<<i); //marking the girl as 1 in bitmask  at i-th bit(i index)=> used
+                ans=Math.max(ans, 1 + solve(boys, girls, idx+1, bit, dp));
+                bit=bit^(1<<i); //backtracking the bit, let's choose another girl if possible => make it 0(available)
+            }
+        }
+        return dp[idx][bit]=ans;
+    }
+}
+
+
+/* 
+LOGIC---
+NP complete problem
+Polynomial solution exists
+DP with bitmask => DP on susbset optimised by bitmask => Converts O(n!) -> O(2^n)
+
+Since n constraint is 15 => 1111 (binary) needed
+
+idx -> iterate over boys
+bit -> bit mask -> to keep count of girls used since there can be max 15 girls(in binary we need upto 1111, 4 bits)
+
+The bitmask is used in this algorithm to efficiently track which girls have already been paired with boys during the recursive calls.
+
+Since all girls needs to be used. We check possiblitty of choosing a boy or not.
+If boy choosen, now check possiblity of trying to pair him with each gil in subsequent recursion flow.
+
+Now to maintain the ccorrect girl used, we use a bit mask. Since constraitn is of n<=16. 
+We can use upto 32 bits. Each ith bit represent ith index which can be turned into a set bit to show the girl is used.
+And then again backtrack on it.
+
+TC- O(2^n*(n^2)) => n*(2^n) states(n boys and 2^n bitmasks) and then we run a loop of size n for girls
+SC - O(2^n*(n^2)) => size of dp array
+
+
+## Size of dp array[][] 
+First Dimension (n): This represents the index of the current boy being considered. 
+Since there are n boys, the first dimension of the dp array is n.
+
+Second Dimension ((1 << n) + 1) => (2^n +1) => This represents all possible states of pairing the boys with the girls. 
+Each state is a unique bitmask, where each bit indicates whether a particular girl has been paired.
+
+Why (1 << n) + 1?
+Bitmask Representation: The bitmask needs n bits to represent the pairing status of all n girls. 
+For example, if n = 3, the possible bitmasks range from 000 (no girls paired) to 111 (all three girls paired), 
+which are 2^3 = 8 states.
+The +1 ensures that all possible bitmask states are covered, for safety.(like including all 000... state.    
+    
+    
+## Why use bit mask dp?
+Space Efficiency: A bitmask uses a single integer to represent the state of multiple elements (like girls in this case). 
+For example, if you have 10 girls, you can represent whether each girl is paired using a 10-bit integer (0 or 1 for each girl). 
+This is much more space-efficient than using an array of booleans to keep check which girl was used and would take additional O(n) space, 
+especially as the number of girls increases.
+
+While in bitmask we only need an integer which is O(1) space.
+Also, bit operations are faster.
+
+What happens if n becomes 100?
+Even DP will give TLE. At that time it becoems an implementation problem of graph. Minimum Remaining Boys - 1
+*/
+
+
+/* RECURSION TLE */
+class Solution {
+    public static int minRemaining(int n, int[][] boys, int[][] girls) {
+        int pairs=solve(boys, girls, 0, 0); //no of boys used
+        return n-pairs;
+    }
+    
+    public static int solve(int[][] boys, int[][] girls, int idx, int bit){
+        if(idx>=boys.length) return 0;  //no of boys over, but girls still left => not possible
+        int x=boys[idx][0]; //coordinates of boy 
+        int y=boys[idx][1];
+        int ans=solve(boys, girls, idx+1, bit);  //case where current boy is not paired
+        for(int i=0;i<girls.length;i++){    //case boy is selected, try to match with each girl
+            if((bit&(1<<i)) > 0) continue;   //girl already paired
+            if(x<girls[i][0] && y<girls[i][1]){ //fulfilling condition
+                bit = bit | (1<<i); //marking the girl as 1 in bitmask  at i-th bit(i index)=> used
+                ans=Math.max(ans, 1 + solve(boys, girls, idx+1, bit));
+                bit=bit^(1<<i); //backtracking the bit, let's choose another girl if possible => make it 0(available)
+            }
+        }
+        return ans;
+    }
+}

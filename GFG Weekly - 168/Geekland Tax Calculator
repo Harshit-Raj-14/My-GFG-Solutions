@@ -1,0 +1,11 @@
+class Solution {
+    public static int percentTax(long i) {
+        if(i<300000) return 0;
+        else if(i>=300000 && i<700000) return 5;
+        else if(i>=700000 && i<1000000) return 10;
+        else if(i>=1000000 && i<1200000) return 15;
+        else if(i>=1200000 && i<1500000) return 20;
+        else return 30;
+        
+    }
+}
