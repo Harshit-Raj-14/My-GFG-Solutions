@@ -1,0 +1,51 @@
+/* O(n) */
+class Solution {
+    public static int[] calculateSpan(int prices[], int n) {
+        int ans[] = new int[n];
+        Stack<Integer> stack = new Stack<>();
+        for(int i=0;i<n;i++){
+            while(stack.size()!=0 && prices[stack.peek()]<=prices[i]){
+                stack.pop();
+            }
+            if(stack.isEmpty()) ans[i]=i+1;
+            else ans[i]=i-stack.peek();
+            stack.push(i);
+        }
+        return ans;
+    }
+}
+
+/*
+LOGIC---
+Span(days) is defiend as the consecutive smaller or equal elements directly to the left of curr element.
+
+We store the indexes of prices in stack.(unique values)
+
+Case I: stack is empty => meaning there are no elements to the left side of curr, that are greater than it.
+=>So it is the largest price till now.
+So, we can say that total no of span = i+1 => total days till i (including itself, 0 indexed, so adding 1)
+
+Case II: stack is not empty
+Since we have indexes stored in our stack. We compare prices[stack.peek()] with prices[i]
+If we learn that the topmost index in stack refers to  a price that is smaller than or equal to curr prices
+=> we say it can form part of a consecutive series
+=> so keep on popping it, till we reach index where it no longer form a consecutive series
+=> in this case span will be elemnts after the top of stack till prices[i].
+=> span= i-stack.peek()
+*/
+
+/* BRUTE FORCE O(n^2) */
+class Solution {
+    public static int[] calculateSpan(int prices[], int n) {
+        int ans[] = new int[n];
+        for(int i=0;i<n;i++){
+            int days=0;
+            for(int j=i;j>=0;j--){
+                if(prices[i]>=prices[j]) days++;
+                else break;
+            }
+            ans[i]=days;
+        }
+        return ans;
+    }
+}
