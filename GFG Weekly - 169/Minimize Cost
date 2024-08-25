@@ -1,0 +1,42 @@
+class Solution {
+    public static long minCost(int n, int[] a, int[] b) {
+        HashSet<Integer> set = new HashSet<>(); //get all elements in set we need to work with
+        HashMap<Integer, Integer> map1 = new HashMap<>();
+        HashMap<Integer, Integer> map2 = new HashMap<>();
+        for(int i=0;i<n;i++){
+            set.add(a[i]);
+            set.add(b[i]);
+            map1.put(a[i], map1.getOrDefault(a[i], 0) + 1);
+            map2.put(b[i], map2.getOrDefault(b[i], 0) + 1);
+        }
+        ArrayList<Integer> extras = new ArrayList<>();  //exras on which we need to apply swaps
+        for(int x: set){
+            int fa = map1.getOrDefault(x, 0);   //in case a or b do not have that element we give back 0 freq
+            int fb = map2.getOrDefault(x, 0);
+            int diff = Math.abs(fa-fb);
+            if(diff%2!=0) return -1;    //we would never be able to divide or swap elemnts equally => so not possible
+            //if there is a difference, we need to supply the extra half to other array
+            if(diff!=0){
+                for(int i=0;i<diff/2;i++) extras.add(x);
+            }
+        }
+        Collections.sort(extras);    //sort them for organisaed elements so that we have minimum elements in frotn and bigger elements at last
+        //we swap the starting element with the als telemtn of extras, and so on to get minimum cost
+        long ans=0;
+        for(int i=0;i<extras.size()/2;i++){ //we can do this becuase we do not care where the element comes form we care about the final output
+            ans+=Math.min(extras.get(i), extras.get(extras.size()-1-i));    
+        }
+        return ans;
+    }
+}
+
+/*
+LOGIC---
+We want to make the two array nay permutations of each other.
+So frequency of each element in array a = frequency of each element in array b
+
+We are allowed to apply swap operation betweeen elements of two arrays 
+=> at a cost of min(a[i], b[i])
+
+We are using map becuase range of elemnts of a and b is very big
+*/
