@@ -1,0 +1,19 @@
+class Solution {
+    public static int getSmallest(int n) {
+        int i = 0;
+        int x = 0;
+        while (n != 0) {
+            if ((n & 1) == 0) {
+                x = (int) Math.pow(2, i);
+                break;
+            }
+            n = n >> 1;
+            i++;
+        }
+        // If n becomes 0, it means all bits were 1, and the next power of 2 should be returned.
+        if (n==0) {
+            x = (int)Math.pow(2, i);
+        }
+        return x;
+    }
+}

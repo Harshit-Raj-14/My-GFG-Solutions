@@ -1,0 +1,35 @@
+class Solution {
+    public static int isValid(int n, int[] arr) {
+        int sum = 0;
+        for (int sweet : arr) {
+            sum += sweet;
+        }
+        // If total sum is not divisible by 3, return 0 => possible to divide into x and 2x => x in three parts
+        if (sum % 3 != 0) return 0;
+        int half = sum / 3;
+        boolean dp[][] = new boolean[n+1][sum+1];
+        if (solve(n, arr, 0, 0, half, dp)) return 1;
+        else return 0;
+    }
+    
+    public static boolean solve(int n, int[] arr, int idx, int currsum, int half, boolean dp[][]){
+        if (currsum == half) return true;
+        if (idx >= n || currsum > half) return false;
+        if (dp[idx][currsum]==true) return dp[idx][currsum];
+        // Explore the possibility of including the current candy in the half or not
+        // boolean take = solve(n, arr, idx + 1, currsum + arr[idx], half, dp);    //put in half
+        // boolean notTake = solve(n, arr, idx + 1, currsum, half, dp);    //do not put in half
+        // return dp[idx][currsum] = take || notTake;
+        return dp[idx][currsum] = solve(n, arr, idx + 1, currsum + arr[idx], half, dp) || solve(n, arr, idx + 1, currsum, half, dp);
+    }
+}
+
+/*
+ * LOGIC---
+ * We are to make two kinds of sum(x) such that x + 2*x = sum of array
+ * With the given array tell whether such x and 2*x can exist or not.
+ * 
+ * So, we have a choice when iterating over array, either we put arr[i] to the half or either we don't (indirectly sayign we add it to the double x).
+ *
+ * This is usally referred to as subset sum dp problem. Where we fidn the sum of a specific subset based on conditin.
+ * /
