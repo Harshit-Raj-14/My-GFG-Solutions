@@ -1,0 +1,26 @@
+class Solution {
+    public static int firsthour(int n, int[][] arr) {
+        int maxStart = Integer.MIN_VALUE;
+        int minEnd = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            int start = arr[i][0];
+            int end = arr[i][1];
+            // Update the max start time and min end time
+            maxStart = Math.max(maxStart, start);
+            minEnd = Math.min(minEnd, end);
+        }
+        // If max start time is less than or equal to min end time, intervals overlap
+        if(maxStart <= minEnd) return 1;
+        else return 0;
+    }
+}
+
+/*
+LOGIC---
+Overlap Condition: For any two intervals to overlap, the latest starting point must be less than or equal to the earliest ending point.
+
+To solve this we iterate through each interval to find the maximum of the start times and the minimum of the end times. 
+If the minimum end time is greater than or equal to the maximum start time, it means there is an overlap, and we returns true. 
+otherwise, it returns false.
+In fact all the numbers between and inclusive maxstart and maxend are common meeting times.
+*/

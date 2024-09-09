@@ -1,0 +1,51 @@
+class Solution {
+    public static int findswaps(int n, int[] arr) {
+        //Step I: Create a sorted copy of the array in descending order
+        int[] temp = arr.clone();  
+        Arrays.sort(temp);
+        reverse(temp); 
+        //Step II: Create a mapping of values to their indices in the original array
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) map.put(arr[i], i);
+        boolean[] visited = new boolean[n]; // To mark visited elements
+        int swaps = 0;
+        // Loop through each element to find cycles
+        for (int i = 0; i < n; i++) {
+            if(arr[i]!=temp[i]){    //we try to bring the element to its correct place
+                swaps++;
+                int idx = map.get(temp[i]); //curr posiiton of the sorted element
+                //swap indexes in map for the element
+                map.put(arr[i], idx);
+                map.put(temp[i], i);
+                //swap elements in array as well
+                int t=arr[i];
+                arr[i]=arr[idx];
+                arr[idx]=t;
+            }
+        }
+        return swaps;
+    }
+    
+    private static void reverse(int[] arr) {
+        int left = 0, right = arr.length - 1;
+        while (left < right) {
+            int temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
+        }
+    }
+}
+
+/*
+LOGIC---
+An array will have maximum inversion if its in descending order. example tc-2
+
+So, just find the no of swaps to make array descending order.
+
+APPROACH---
+Step I: Make a sorted array in reverse order => descending to compare how our final array should look like
+Step II: Make a hashmap with indexes of actual unsorted array
+Step III: decide whether to swap or not
+*/

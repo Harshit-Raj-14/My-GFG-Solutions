@@ -1,0 +1,29 @@
+class Solution {
+    public static char stringPuzzle(String s, long idx){
+        idx--;  //make it 0 indexed
+        int currlen = s.length();
+        Stack<Character> st = new Stack<>();
+        s+="$"; //$ has an ascii less than 'a' so it won't affect stack => it will help us to delete the last character in case we required it => like in "ab"
+        for(char c:s.toCharArray()){
+            while(idx>=currlen && !st.isEmpty() && st.peek()>c){
+                idx-=currlen;   //downing idx to the point where we can predict it
+                currlen--;
+                st.pop();   //pop element that will make s lexicographically smallest
+                if(idx<currlen) break;
+            }
+            st.push(c);
+        }
+        return st.get((int)idx);
+    }
+}
+
+/*
+LOGIC---
+To solve this we use a stack to maintain the current sequence of characters 
+and ensures that the sequence remains lexicographically minimal by popping characters 
+from the stack when a smaller character is encountered. This process continues until 
+the desired index is within the current length of the word.
+
+Using stack we are maintaing a virtual string where characters are deleted while maintaining the 
+string to be lexicographically smallest.
+*/
