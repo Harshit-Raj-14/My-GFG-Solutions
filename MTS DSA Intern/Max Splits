@@ -1,0 +1,70 @@
+PS- Max Splits (MTS DSA Intern GFG)
+Consider two strings, s and t which are anagram. 
+Geek wants to partition both strings into k non-empty segments such that each segment of s 
+is an anagram of the corresponding segment of t. 
+Determine the maximum value of k.
+
+Input: s = "aaabc", t = "aaacb"
+Output: 4
+Explanation:
+The four partitions of string s are {a,a,a,bc), similarly the four parts of string t are {a,a,a,cb}. 
+The ith partition of s is an anagram of the ith part of string t.
+
+/* CODE */
+class Solution {
+    public static int maxSplits(String s1, String s2){
+        HashMap<Character, Integer> map1 = new HashMap<>();
+        HashMap<Character, Integer> map2 = new HashMap<>();
+        int partitions=0;
+        for(int i=0;i<s1.length();i++){
+            map1.put(s1.charAt(i), map1.getOrDefault(s1.charAt(i),0)+1);
+            map2.put(s2.charAt(i), map2.getOrDefault(s2.charAt(i),0)+1);
+            if(map1.equals(map2)) partitions++;
+        }
+        return partitions;
+    }
+}
+
+/*
+ * LOGIC---
+ * Since s1 and s2 are anagram.
+ * So, if s1=XY, s2=AB
+ * So, if X=A then Y=B
+ * So, if at some poitn as we calculate freuqency of s1 and s2 and they becoem equal the remaining part would also be an anagram.
+ * The maximum number of these map equality occurs as we iterate, that will be the maximum number of partititons.
+ 
+EXAMPLE--- s1 = "abca", s2 = "bcab"
+At i = 0:
+s1: [a]bca
+s2: [b]cab
+map1: {a: 1}, map2: {b: 1} -> Not Equal, No partition
+
+At i = 1:
+s1: a[b]ca
+s2: b[c]ab
+map1: {a: 1, b: 1}, map2: {b: 1, c: 1} -> Not Equal, No partition
+
+At i = 2:
+s1: ab[c]a
+s2: bc[a]b
+map1: {a: 1, b: 1, c: 1}, map2: {a: 1, b: 1, c: 1} -> Equal, Partition!
+
+At i = 3:
+s1: abc[a]
+s2: bca[b]
+map1: {a: 2, b: 1, c: 1}, map2: {a: 1, b: 2, c: 1} -> Not Equal, No partition
+
+This dry run confirms that only one valid partition occurs at i = 2.
+
+ANS=1
+
+TC-O(n)
+SC-O(26) => you could have also used int count[26] and compared equality of two arrays
+
+*/
+
+/* BRUTE FORC */
+LOGIC---
+The simple idea is to iterate through the string and check if the substrings up to each position form anagrams. 
+We can do this by sorting the substrings and comparing them. 
+If they are anagrams, we increment the count of segments.
