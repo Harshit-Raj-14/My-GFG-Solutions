@@ -1,0 +1,10 @@
+class Solution {
+    public static long maxProduct(int n) {
+        long even=n/2;
+        long odd=(n+1)/2;
+        long ee=even*even;
+        long oo=even*odd;
+        if(n%2==0) return ee;
+        else return oo;
+    }
+}

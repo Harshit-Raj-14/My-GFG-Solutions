@@ -1,0 +1,16 @@
+class Solution {
+    public static long maxSum(int n, int x, int[] arr) {
+        HashSet<Integer> set = new HashSet<>();
+        HashSet<Integer> unset = new HashSet<>();
+        for(int i = 0; i < n; i++) {
+            if (((arr[i] >> x-1) & 1) == 1) set.add(arr[i]);
+            else unset.add(arr[i]);
+        }
+        if (set.size() == 0 || unset.size() == 0) return -1;
+        long maxset = Integer.MIN_VALUE;
+        long maxunset = Integer.MIN_VALUE;
+        for (int i : set) maxset = Math.max(maxset, i);
+        for (int i : unset) maxunset = Math.max(maxunset, i);
+        return maxset + maxunset;
+    }
+}
