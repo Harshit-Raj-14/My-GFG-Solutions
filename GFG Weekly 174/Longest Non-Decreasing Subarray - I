@@ -49,7 +49,6 @@ We will only update when we either restart or encounter new values.
 
 
 
-
 /* BRUTE FORCE TLE O(n^2) */
 class Solution {
     public static int longestSubarray(int n, int[] nums, int k) {
@@ -69,92 +68,3 @@ class Solution {
         return ans;
     }
 }
-
-
-
-
-
-
-
-
-
-
-class Solution {
-    public static int longestCommonPalindrome(String str1, String str2) {
-        String res1=solve(str1,str2);
-        StringBuilder sb=new StringBuilder(res1);
-        String res2=sb.reverse().toString();//keeg
-        String res3=solve(res1,res2);//geek
-        return res3.length();
-    }
-    
-    public static String solve(String str1,String str2){
-        int n=str1.length();
-        int m=str2.length();
-        int dp[][]=new int[n+1][m+1];
-        int start=0,end=0,max=0;
-        for(int i=1;i<=n;i++){
-            for(int j=1;j<=m;j++){
-                if(str1.charAt(i-1)==str2.charAt(j-1)){
-                    dp[i][j]=1+dp[i-1][j-1];
-                }
-                else dp[i][j]=0;
-                if(dp[i][j]>max){
-                    max=dp[i][j];
-                    start=i;
-                    end=j;
-                }
-            }
-        }
-        StringBuilder sb=new StringBuilder();
-        while(dp[start][end]>0){
-            sb.append(str1.charAt(start-1));
-            start--;
-            end--;
-        }
-        return sb.toString();
-    }
-}
-
-/*
-LOGIC---
-Find longest common string between s1 and s2. Lets call it s.
-Now reverse s.
-The common substring between s and reverse of s will be the longest common palindrome substring.
-*/
-
-
-/* EXPAND AROUND CENTER O(n^2) TLE */
-class Solution {
-    public static int longestCommonPalindrome(String s1, String s2) {
-        HashSet<String> palindromes = new HashSet<>();
-        int n = s1.length();
-        // Check for palindromic substrings centered at each character and between characters
-        for (int center = 0; center < n; center++) {
-            findPalindromes(s1, center, center, palindromes); // Odd-length palindromes
-            findPalindromes(s1, center, center + 1, palindromes); // Even-length palindromes
-        }
-        //check for these palindrome substrings in s2
-        int ans=0;
-        for(String s : palindromes){
-            if(s2.contains(s)) ans=Math.max(ans, s.length());
-        }
-        return ans;
-    }
-    
-    private static void findPalindromes(String s, int left, int right, Set<String> palindromes) {
-        while (left>=0 && right<s.length() && s.charAt(left)==s.charAt(right)) {
-            palindromes.add(s.substring(left, right + 1));
-            left--;
-            right++;
-        }
-    }
-}
-
-
-/*
-LOGIC---
-Find all palindromic substring in s1 using expand around center store them in set.
-Now check whether these substrings in set occurs in s2 or not.
-Get the longest length.
-*/
