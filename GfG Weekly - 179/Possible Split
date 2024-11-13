@@ -1,0 +1,53 @@
+class Solution {
+    public static int isPossible(int n, int[] arr) {
+        int[] fact2 = new int[n];
+        int[] fact5 = new int[n];
+        
+        // Step 1: Count factors of 2 and 5 for each element
+        for (int i = 0; i < n; i++) {
+            fact2[i] = countFactors(arr[i], 2);
+            fact5[i] = countFactors(arr[i], 5);
+        }
+        
+        // Step 2: Create prefix sums for factors of 2 and 5
+        int[] prefix2 = new int[n];
+        int[] prefix5 = new int[n];
+        prefix2[0] = fact2[0];
+        prefix5[0] = fact5[0];
+        for (int i = 1; i < n; i++) {
+            prefix2[i] = prefix2[i - 1] + fact2[i];
+            prefix5[i] = prefix5[i - 1] + fact5[i];
+        }
+        int total2 = prefix2[n - 1];
+        int total5 = prefix5[n - 1];
+        
+        // Step 3: Check possible split points
+        for (int i=1; i<n; i++) {
+            int left2 = prefix2[i - 1];
+            int left5 = prefix5[i - 1];
+            int right2 = total2 - left2;
+            int right5 = total5 - left5;
+            if (Math.min(left2, left5) == Math.min(right2, right5)) {
+                return 1; // A split with equal trailing zero count is possible
+            }
+        }
+        return 0; // No valid split found
+    }
+
+    private static int countFactors(int n, int f) {
+        int count = 0;
+        while (n % f == 0) {
+            count++;
+            n /= f;
+        }
+        return count;
+    }
+}
+
+
+
+/*
+LOGIC---
+Trailing zeros can only come from multiple of 10 or multiples of(2x5)
+
+*/

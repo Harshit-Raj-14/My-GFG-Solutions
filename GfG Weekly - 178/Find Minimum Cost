@@ -1,0 +1,21 @@
+class Solution {
+    public static long minCost(int n, int[] a){
+        //make all elements even
+        long ans1=0;
+        for(int x: a){
+            if(x%2!=0) ans1+=x;
+        }
+        //make all elements odd
+        long ans2=0;
+        for(int x: a){
+            if(x%2==0) ans2+=x;
+        }
+        return Math.min(ans1, ans2);
+    }
+}
+
+/*
+LOGIC---
+Since we are picking two elements.
+To have their sum even, either both elements should be even or odd.
+*/

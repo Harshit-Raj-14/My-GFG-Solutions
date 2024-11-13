@@ -1,0 +1,31 @@
+class Solution {
+    public static long minOps(long a, long b, long c) {
+        long arr[] = new long[3];
+        arr[0]=a;arr[1]=b;arr[2]=c;
+        Arrays.sort(arr);
+        long diff1=arr[1]-arr[0];
+        long ans=0;
+        if(diff1!=arr[2]-arr[1]){    //not already a triplet, so make it
+            long diff2=arr[2]-arr[1];
+            long twicevalidc=(arr[0]+arr[2]);
+            ans=Math.abs(2*arr[1]-twicevalidc);
+            if(ans%2==0) ans/=2;    //halving since we were considering twice c's
+            else ans=ans/2+1;   //in case of valid c being odd extra opertation to make it even
+        }
+        return ans;
+    }
+}
+
+/*
+LOGIC---
+Triplet : a+b=2c
+c= (a+b)/2
+
+This is in fact AP : with c being arithmetic median
+That means, a,c,b should be in AP.
+
+So, we have a triplet as long as we have c-a=b-c when a,b,c is sorted.
+
+So, we can just apply operations on b to get our asnwer.
+
+*/

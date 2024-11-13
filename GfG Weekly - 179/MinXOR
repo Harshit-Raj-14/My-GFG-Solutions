@@ -1,0 +1,16 @@
+class Solution {
+    public static int minXOR(int n, int k, int[] arr){
+        int ans=0;
+        for(int i=31;i>=0;i--){ //we start iterating from back becuase we would want to neutralise the larsgest setbits on left
+            int setbits=0;
+            for(int j=0;j<arr.length;j++){
+                if(((arr[j]>>i)&1)==1) setbits++;
+            }
+            if(setbits%2!=0){
+                if(k>0) k--;
+                else ans+=(1<<i);
+            }
+        }
+        return ans;
+    }
+}

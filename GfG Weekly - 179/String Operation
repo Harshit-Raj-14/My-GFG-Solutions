@@ -1,0 +1,14 @@
+class Solution {
+    public static int getOperations(String s) {
+        int count[] = new int[26];
+        int ans=0;
+        for(int i=0;i<s.length();i++){
+            count[s.charAt(i)-'a']++;
+            if(count[s.charAt(i)-'a']==3){
+                count[s.charAt(i)-'a']-=3;
+                ans++;
+            }
+        }
+        return ans;
+    }
+}
